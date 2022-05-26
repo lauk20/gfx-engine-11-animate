@@ -354,14 +354,16 @@ void my_main() {
           tmp->lastcol = 0;
           break;
         case SCALE:
-          xval = op[i].op.scale.d[0] * op[i].op.scale.p->s.value;
-          yval = op[i].op.scale.d[1] * op[i].op.scale.p->s.value;
-          zval = op[i].op.scale.d[2] * op[i].op.scale.p->s.value;
+          xval = op[i].op.scale.d[0];
+          yval = op[i].op.scale.d[1];
+          zval = op[i].op.scale.d[2];
           printf("Scale: %6.2f %6.2f %6.2f",
                  xval, yval, zval);
           if (op[i].op.scale.p != NULL) {
             printf("\tknob: %s",op[i].op.scale.p->name);
-            //printf("\tknob: %s",op[i].op.scale.p->name);
+            xval = op[i].op.scale.d[0] * op[i].op.scale.p->s.value;
+            yval = op[i].op.scale.d[1] * op[i].op.scale.p->s.value;
+            zval = op[i].op.scale.d[2] * op[i].op.scale.p->s.value;
           }
           tmp = make_scale( xval, yval, zval );
           matrix_mult(peek(systems), tmp);
@@ -369,12 +371,13 @@ void my_main() {
           tmp->lastcol = 0;
           break;
         case ROTATE:
-          theta =  op[i].op.rotate.degrees * (M_PI / 180) * op[i].op.rotate.p->s.value;
+          theta =  op[i].op.rotate.degrees * (M_PI / 180);
           printf("Rotate: axis: %6.2f degrees: %6.2f",
                  op[i].op.rotate.axis,
                  theta);
           if (op[i].op.rotate.p != NULL) {
             printf("\tknob: %s",op[i].op.rotate.p->name);
+            theta =  op[i].op.rotate.degrees * (M_PI / 180) * op[i].op.rotate.p->s.value;
           }
 
           if (op[i].op.rotate.axis == 0 )
