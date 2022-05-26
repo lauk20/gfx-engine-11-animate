@@ -147,9 +147,13 @@ struct vary_node ** second_pass() {
       int end_val = op[i].op.vary.end_val;
       char * knobname = op[i].op.vary.p->name;
 
+      printf("%d %d %d %d\n", start_frame, end_frame, start_val, end_val);
+
       for (int v = start_frame; v <= end_frame; v++){
         knobs[v] = add_node(knobs[v], knobname);
-        knobs[v]->value = (end_val - start_val)/(end_frame - start_frame);
+        //printf("%faa\n", ((double)(end_val - start_val)/(double)(end_frame - start_frame)));
+        knobs[v]->value = v * ((double)(end_val - start_val)/(double)(end_frame - start_frame));
+        printf("%s %f\n", knobname, knobs[v]->value);
       }
     }
   }
@@ -347,6 +351,8 @@ void my_main() {
             xval = op[i].op.move.d[0] * op[i].op.move.p->s.value;
             yval = op[i].op.move.d[1] * op[i].op.move.p->s.value;
             zval = op[i].op.move.d[2] * op[i].op.move.p->s.value;
+            printf("Move: %6.2f %6.2f %6.2f",
+                   xval, yval, zval);
           }
           tmp = make_translate( xval, yval, zval );
           matrix_mult(peek(systems), tmp);
@@ -364,6 +370,8 @@ void my_main() {
             xval = op[i].op.scale.d[0] * op[i].op.scale.p->s.value;
             yval = op[i].op.scale.d[1] * op[i].op.scale.p->s.value;
             zval = op[i].op.scale.d[2] * op[i].op.scale.p->s.value;
+            printf("Scale: %6.2f %6.2f %6.2f",
+                   xval, yval, zval);
           }
           tmp = make_scale( xval, yval, zval );
           matrix_mult(peek(systems), tmp);
@@ -378,6 +386,9 @@ void my_main() {
           if (op[i].op.rotate.p != NULL) {
             printf("\tknob: %s",op[i].op.rotate.p->name);
             theta =  op[i].op.rotate.degrees * (M_PI / 180) * op[i].op.rotate.p->s.value;
+            printf("Rotate: axis: %6.2f degrees: %6.2f",
+                   op[i].op.rotate.axis,
+                   theta);
           }
 
           if (op[i].op.rotate.axis == 0 )
@@ -419,9 +430,28 @@ void my_main() {
         }
       printf("\n");
     } //end operation loop
+
+    char filename[128];
+    strcpy(filename, "anim/");
+    strcat(filename, name);
+    char number[128];
+    sprintf(number, "%03d", v);
+    strcat(filename, number);
+    save_extension(t, filename);
+
+    display(t);
+
+    free_stack(systems);
+    systems = new_stack();
+    free_matrix(tmp);
+    tmp = new_matrix(4, 1000);
+    clear_screen( t );
+    clear_zbuffer(zb);
   }
 
   free_stack( systems );
   free_matrix( tmp );
+
+  make_animation(name);
 
 }
