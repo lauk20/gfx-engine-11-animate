@@ -57,7 +57,7 @@ struct vary_node * get_knob_node(struct vary_node * front, char * knob_name) {
 struct vary_node * add_node(struct vary_node * front, char * knob_name) {
   struct vary_node * curr = (struct vary_node*)calloc(1, sizeof(struct vary_node));
   strncpy( curr->name, knob_name, sizeof(curr->name));
-  curr->value = 0;
+  curr->value = 5;
   curr->next = front;
   return curr;
 }
@@ -147,13 +147,26 @@ struct vary_node ** second_pass() {
       int end_val = op[i].op.vary.end_val;
       char * knobname = op[i].op.vary.p->name;
 
-      printf("%d %d %d %d\n", start_frame, end_frame, start_val, end_val);
+      //printf("%d %d %d %d\n", start_frame, end_frame, start_val, end_val);
 
+      double increment = ((double)(end_val - start_val)/(double)(end_frame - start_frame));
+      double current = start_val - increment;
       for (int v = start_frame; v <= end_frame; v++){
-        knobs[v] = add_node(knobs[v], knobname);
+        struct vary_node * new_node = add_node(knobs[v], knobname);
         //printf("%faa\n", ((double)(end_val - start_val)/(double)(end_frame - start_frame)));
-        knobs[v]->value = v * ((double)(end_val - start_val)/(double)(end_frame - start_frame));
-        printf("%s %f\n", knobname, knobs[v]->value);
+        new_node->value = current + increment;
+        current = new_node->value;
+        /*
+        printf("KN%p\n", knobs[v]);
+        printf("NT%p\n", new_node->next);
+        */
+        knobs[v] = new_node;
+        /*
+        printf("nn%p\n", new_node);
+        printf("kn%p\n", knobs[v]);
+        printf("nnn%p\n", new_node->next);
+        */
+        printf("%s %f\n", knobname, new_node->value);
       }
     }
   }
@@ -230,10 +243,10 @@ void my_main() {
 
   for (int v = 0; v < num_frames; v++){
     struct vary_node * current = knobs[v];
-    struct vary_node * next = current->next;
-    while (current->next != NULL){
+    while (current){
       SYMTAB * knob_symbol = lookup_symbol(current->name);
       if (knob_symbol){
+        printf("SET%f %s\n", current->value, current->name);
         set_value(knob_symbol, current->value);
       } else {
         add_symbol(current->name, SYM_VALUE, &(current->value));
@@ -385,6 +398,7 @@ void my_main() {
                  theta);
           if (op[i].op.rotate.p != NULL) {
             printf("\tknob: %s",op[i].op.rotate.p->name);
+            printf("VAL%f\n", op[i].op.rotate.p->s.value);
             theta =  op[i].op.rotate.degrees * (M_PI / 180) * op[i].op.rotate.p->s.value;
             printf("Rotate: axis: %6.2f degrees: %6.2f",
                    op[i].op.rotate.axis,
@@ -439,7 +453,7 @@ void my_main() {
     strcat(filename, number);
     save_extension(t, filename);
 
-    display(t);
+    //display(t);
 
     free_stack(systems);
     systems = new_stack();
