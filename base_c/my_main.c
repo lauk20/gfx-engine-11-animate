@@ -166,7 +166,7 @@ struct vary_node ** second_pass() {
         printf("kn%p\n", knobs[v]);
         printf("nnn%p\n", new_node->next);
         */
-        printf("%s %f\n", knobname, new_node->value);
+        //printf("%s %f\n", knobname, new_node->value);
       }
     }
   }
@@ -246,7 +246,7 @@ void my_main() {
     while (current){
       SYMTAB * knob_symbol = lookup_symbol(current->name);
       if (knob_symbol){
-        printf("SET%f %s\n", current->value, current->name);
+        //printf("SET%f %s\n", current->value, current->name);
         set_value(knob_symbol, current->value);
       } else {
         add_symbol(current->name, SYM_VALUE, &(current->value));
@@ -256,20 +256,20 @@ void my_main() {
 
     for (i=0;i<lastop;i++) {
 
-      printf("%d: ",i);
+      //printf("%d: ",i);
       switch (op[i].opcode)
         {
         case SPHERE:
-          printf("Sphere: %6.2f %6.2f %6.2f r=%6.2f",
+          /*printf("Sphere: %6.2f %6.2f %6.2f r=%6.2f",
                  op[i].op.sphere.d[0],op[i].op.sphere.d[1],
                  op[i].op.sphere.d[2],
-                 op[i].op.sphere.r);
+                 op[i].op.sphere.r);*/
           if (op[i].op.sphere.constants != NULL) {
-            printf("\tconstants: %s",op[i].op.sphere.constants->name);
+            //printf("\tconstants: %s",op[i].op.sphere.constants->name);
             reflect = lookup_symbol(op[i].op.sphere.constants->name)->s.c;
           }
           if (op[i].op.sphere.cs != NULL) {
-            printf("\tcs: %s",op[i].op.sphere.cs->name);
+            //printf("\tcs: %s",op[i].op.sphere.cs->name);
           }
           add_sphere(tmp, op[i].op.sphere.d[0],
                      op[i].op.sphere.d[1],
@@ -282,16 +282,16 @@ void my_main() {
           reflect = &white;
           break;
         case TORUS:
-          printf("Torus: %6.2f %6.2f %6.2f r0=%6.2f r1=%6.2f",
+          /*printf("Torus: %6.2f %6.2f %6.2f r0=%6.2f r1=%6.2f",
                  op[i].op.torus.d[0],op[i].op.torus.d[1],
                  op[i].op.torus.d[2],
-                 op[i].op.torus.r0,op[i].op.torus.r1);
+                 op[i].op.torus.r0,op[i].op.torus.r1);*/
           if (op[i].op.torus.constants != NULL) {
-            printf("\tconstants: %s",op[i].op.torus.constants->name);
+            //printf("\tconstants: %s",op[i].op.torus.constants->name);
             reflect = lookup_symbol(op[i].op.sphere.constants->name)->s.c;
           }
           if (op[i].op.torus.cs != NULL) {
-            printf("\tcs: %s",op[i].op.torus.cs->name);
+            //printf("\tcs: %s",op[i].op.torus.cs->name);
           }
           add_torus(tmp,
                     op[i].op.torus.d[0],
@@ -305,17 +305,17 @@ void my_main() {
           reflect = &white;
           break;
         case BOX:
-          printf("Box: d0: %6.2f %6.2f %6.2f d1: %6.2f %6.2f %6.2f",
+          /*printf("Box: d0: %6.2f %6.2f %6.2f d1: %6.2f %6.2f %6.2f",
                  op[i].op.box.d0[0],op[i].op.box.d0[1],
                  op[i].op.box.d0[2],
                  op[i].op.box.d1[0],op[i].op.box.d1[1],
-                 op[i].op.box.d1[2]);
+                 op[i].op.box.d1[2]);*/
           if (op[i].op.box.constants != NULL) {
-            printf("\tconstants: %s",op[i].op.box.constants->name);
+            //printf("\tconstants: %s",op[i].op.box.constants->name);
             reflect = lookup_symbol(op[i].op.sphere.constants->name)->s.c;
           }
           if (op[i].op.box.cs != NULL) {
-            printf("\tcs: %s",op[i].op.box.cs->name);
+            //printf("\tcs: %s",op[i].op.box.cs->name);
           }
           add_box(tmp,
                   op[i].op.box.d0[0],op[i].op.box.d0[1],
@@ -329,19 +329,19 @@ void my_main() {
           reflect = &white;
           break;
         case LINE:
-          printf("Line: from: %6.2f %6.2f %6.2f to: %6.2f %6.2f %6.2f",
+          /*printf("Line: from: %6.2f %6.2f %6.2f to: %6.2f %6.2f %6.2f",
                  op[i].op.line.p0[0],op[i].op.line.p0[1],
                  op[i].op.line.p0[2],
                  op[i].op.line.p1[0],op[i].op.line.p1[1],
-                 op[i].op.line.p1[2]);
+                 op[i].op.line.p1[2]);*/
           if (op[i].op.line.constants != NULL) {
-            printf("\n\tConstants: %s",op[i].op.line.constants->name);
+            //printf("\n\tConstants: %s",op[i].op.line.constants->name);
           }
           if (op[i].op.line.cs0 != NULL) {
-            printf("\n\tCS0: %s",op[i].op.line.cs0->name);
+            //printf("\n\tCS0: %s",op[i].op.line.cs0->name);
           }
           if (op[i].op.line.cs1 != NULL) {
-            printf("\n\tCS1: %s",op[i].op.line.cs1->name);
+            //printf("\n\tCS1: %s",op[i].op.line.cs1->name);
           }
           add_edge(tmp,
                    op[i].op.line.p0[0],op[i].op.line.p0[1],
@@ -357,15 +357,15 @@ void my_main() {
           xval = op[i].op.move.d[0];
           yval = op[i].op.move.d[1];
           zval = op[i].op.move.d[2];
-          printf("Move: %6.2f %6.2f %6.2f",
-                 xval, yval, zval);
+          /*printf("Move: %6.2f %6.2f %6.2f",
+                 xval, yval, zval);*/
           if (op[i].op.move.p != NULL) {
-            printf("\tknob: %s",op[i].op.move.p->name);
+            //printf("\tknob: %s",op[i].op.move.p->name);
             xval = op[i].op.move.d[0] * op[i].op.move.p->s.value;
             yval = op[i].op.move.d[1] * op[i].op.move.p->s.value;
             zval = op[i].op.move.d[2] * op[i].op.move.p->s.value;
-            printf("Move: %6.2f %6.2f %6.2f",
-                   xval, yval, zval);
+            /*printf("Move: %6.2f %6.2f %6.2f",
+                   xval, yval, zval);*/
           }
           tmp = make_translate( xval, yval, zval );
           matrix_mult(peek(systems), tmp);
@@ -376,15 +376,15 @@ void my_main() {
           xval = op[i].op.scale.d[0];
           yval = op[i].op.scale.d[1];
           zval = op[i].op.scale.d[2];
-          printf("Scale: %6.2f %6.2f %6.2f",
-                 xval, yval, zval);
+          /*printf("Scale: %6.2f %6.2f %6.2f",
+                 xval, yval, zval);*/
           if (op[i].op.scale.p != NULL) {
-            printf("\tknob: %s",op[i].op.scale.p->name);
+            //printf("\tknob: %s",op[i].op.scale.p->name);
             xval = op[i].op.scale.d[0] * op[i].op.scale.p->s.value;
             yval = op[i].op.scale.d[1] * op[i].op.scale.p->s.value;
             zval = op[i].op.scale.d[2] * op[i].op.scale.p->s.value;
-            printf("Scale: %6.2f %6.2f %6.2f",
-                   xval, yval, zval);
+            /*printf("Scale: %6.2f %6.2f %6.2f",
+                   xval, yval, zval);*/
           }
           tmp = make_scale( xval, yval, zval );
           matrix_mult(peek(systems), tmp);
@@ -393,16 +393,16 @@ void my_main() {
           break;
         case ROTATE:
           theta =  op[i].op.rotate.degrees * (M_PI / 180);
-          printf("Rotate: axis: %6.2f degrees: %6.2f",
+          /*printf("Rotate: axis: %6.2f degrees: %6.2f",
                  op[i].op.rotate.axis,
-                 theta);
+                 theta);*/
           if (op[i].op.rotate.p != NULL) {
-            printf("\tknob: %s",op[i].op.rotate.p->name);
-            printf("VAL%f\n", op[i].op.rotate.p->s.value);
+            //printf("\tknob: %s",op[i].op.rotate.p->name);
+            //printf("VAL%f\n", op[i].op.rotate.p->s.value);
             theta =  op[i].op.rotate.degrees * (M_PI / 180) * op[i].op.rotate.p->s.value;
-            printf("Rotate: axis: %6.2f degrees: %6.2f",
+            /*printf("Rotate: axis: %6.2f degrees: %6.2f",
                    op[i].op.rotate.axis,
-                   theta);
+                   theta);*/
           }
 
           if (op[i].op.rotate.axis == 0 )
@@ -417,32 +417,32 @@ void my_main() {
           tmp->lastcol = 0;
           break;
         case PUSH:
-          printf("Push");
+          //printf("Push");
           push(systems);
           break;
         case POP:
-          printf("Pop");
+          //printf("Pop");
           pop(systems);
           break;
         case SAVE:
-          printf("Save: %s",op[i].op.save.p->name);
+          //printf("Save: %s",op[i].op.save.p->name);
           save_extension(t, op[i].op.save.p->name);
           break;
         case DISPLAY:
-          printf("Display");
+          //printf("Display");
           display(t);
           break;
         case FRAMES:
-          printf("Frames");
+          //printf("Frames");
           break;
         case BASENAME:
-          printf("Basename");
+          //printf("Basename");
           break;
         case VARY:
-          printf("Vary");
+          //printf("Vary");
           break;
         }
-      printf("\n");
+      //printf("\n");
     } //end operation loop
 
     char filename[128];
@@ -453,6 +453,7 @@ void my_main() {
     strcat(filename, number);
     save_extension(t, filename);
 
+    printf("%s\n", filename);
     //display(t);
 
     free_stack(systems);
