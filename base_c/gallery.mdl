@@ -1,0 +1,7 @@
+basename gallery
+push
+move 250 250 0
+rotate x 90
+rotate z 360 spin
+torus 0 0 0 75 125
+save noframes.png
