@@ -95,7 +95,7 @@ void first_pass() {
       frames = 1;
       num_frames = op[i].op.frames.num_frames;
     } else if (op[i].opcode == BASENAME){
-      basename == 1;
+      basename = 1;
       strcpy(name, op[i].op.basename.p->name);
     }
   }
@@ -109,7 +109,7 @@ void first_pass() {
   }
 
   if (!frames){
-    num_frames = 0;
+    num_frames = 1;
   }
 
 }
@@ -425,7 +425,7 @@ void my_main() {
           pop(systems);
           break;
         case SAVE:
-          //printf("Save: %s",op[i].op.save.p->name);
+          printf("Save: %s\n",op[i].op.save.p->name);
           save_extension(t, op[i].op.save.p->name);
           break;
         case DISPLAY:
@@ -445,28 +445,31 @@ void my_main() {
       //printf("\n");
     } //end operation loop
 
-    char filename[128];
-    strcpy(filename, "anim/");
-    strcat(filename, name);
-    char number[128];
-    sprintf(number, "%03d", v);
-    strcat(filename, number);
-    save_extension(t, filename);
+    if (num_frames > 1){
+      char filename[128];
+      strcpy(filename, "anim/");
+      strcat(filename, name);
+      char number[128];
+      sprintf(number, "%03d", v);
+      strcat(filename, number);
+      save_extension(t, filename);
 
-    printf("%s\n", filename);
-    //display(t);
+      printf("Saved Frame: %s\n", filename);
+      //display(t);
 
-    free_stack(systems);
-    systems = new_stack();
-    free_matrix(tmp);
-    tmp = new_matrix(4, 1000);
-    clear_screen( t );
-    clear_zbuffer(zb);
+      free_stack(systems);
+      systems = new_stack();
+      free_matrix(tmp);
+      tmp = new_matrix(4, 1000);
+      clear_screen( t );
+      clear_zbuffer(zb);
+    }
   }
 
   free_stack( systems );
   free_matrix( tmp );
 
-  make_animation(name);
-
+  if (num_frames > 1){
+    make_animation(name);
+  }
 }
